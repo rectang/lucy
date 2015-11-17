@@ -159,6 +159,11 @@ func specClasses(parcel *cfc.Parcel) {
 	polyAnalyzerBinding.SetSuppressCtor(true)
 	polyAnalyzerBinding.Register()
 
+	docBinding := cfc.NewGoClass(parcel, "Lucy::Document::Doc")
+	docBinding.SpecMethod("", "GetFields() map[string]interface{}")
+	docBinding.SpecMethod("", "SetFields(map[string]interface{})")
+	docBinding.Register()
+
 	indexerBinding := cfc.NewGoClass(parcel, "Lucy::Index::Indexer")
 	indexerBinding.SpecMethod("", "Close() error")
 	indexerBinding.SpecMethod("Add_Doc", "AddDoc(doc interface{}) error")

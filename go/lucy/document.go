@@ -48,3 +48,17 @@ func fetchDocFields(d *C.lucy_Doc) map[string]interface{} {
 	}
 	return fieldsGo
 }
+
+func (d *DocIMP) GetFields() map[string]interface{} {
+	self := (*C.lucy_Doc)(clownfish.Unwrap(d, "d"))
+	return fetchDocFields(self)
+}
+
+func (d *DocIMP) SetFields(fields map[string]interface{}) {
+	self := (*C.lucy_Doc)(clownfish.Unwrap(d, "d"))
+	ivars := C.lucy_Doc_IVARS(self)
+	oldID := uintptr(unsafe.Pointer(ivars.fields))
+	newFieldsID := registry.store(fields)
+	ivars.fields = unsafe.Pointer(newFieldsID)
+	registry.delete(oldID)
+}
