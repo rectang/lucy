@@ -17,6 +17,8 @@
 package lucy
 
 import "testing"
+import "reflect"
+import "git-wip-us.apache.org/repos/asf/lucy-clownfish.git/runtime/go/clownfish"
 
 func TestDocMisc(t *testing.T) {
 	doc := NewDoc(1)
@@ -27,9 +29,46 @@ func TestDocMisc(t *testing.T) {
 	if got := doc.GetDocID(); got != 42 {
 		t.Errorf("Set/GetDocID: %d", got)
 	}
-	fields := map[string]interface{}{"title": "foo", "content": "bar"}
+	fields := map[string]interface{}{"content": "foo"}
 	doc.SetFields(fields)
-	if got, ok := doc.Extract("title").(string); !ok || got != "foo" {
+	if got, ok := doc.Extract("content").(string); !ok || got != "foo" {
 		t.Errorf("Extract: %v", got)
+	}
+	doc.Store("content", "bar")
+	retrievedFields := doc.GetFields()
+	if got, ok := retrievedFields["content"].(string); !ok || got != "bar" {
+		t.Errorf("Store/GetFields: %v", got)
+	}
+	if got := doc.GetSize(); got != 1 {
+		t.Errorf("GetSize: %d", got)
+	}
+	if got := doc.FieldNames(); !reflect.DeepEqual(got, []string{"content"}) {
+		t.Errorf("FieldNames: %v", got)
+	}
+	checkDocSerialize(t, doc)
+	checkdocDumpLoad(t, doc)
+}
+
+func checkDocSerialize(t *testing.T, doc Doc) {
+	folder := NewRAMFolder("")
+	outStream, _ := folder.OpenOut("foo")
+	doc.serialize(outStream)
+	outStream.Close()
+	inStream, _ := folder.OpenIn("foo")
+	dupe := clownfish.GetClass(doc).MakeObj().(Doc).deserialize(inStream)
+	if !doc.Equals(dupe) {
+		t.Errorf("Unsuccessful serialization round trip -- expected '%v', got '%v'",
+				 doc.ToString(), dupe.ToString())
+	}
+}
+
+func checkdocDumpLoad(t *testing.T, doc Doc) {
+	t.Skip("Dump/Load are TODO")
+	return
+	dupe := clownfish.GetClass(doc).MakeObj().(Doc)
+	dupe = dupe.load(doc.dump()).(Doc)
+	if !doc.Equals(dupe) {
+		t.Errorf("Unsuccessful dump/load round trip -- expected '%v', got '%v'",
+				 doc.ToString(), dupe.ToString())
 	}
 }

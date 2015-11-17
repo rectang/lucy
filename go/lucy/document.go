@@ -62,3 +62,10 @@ func (d *DocIMP) SetFields(fields map[string]interface{}) {
 	ivars.fields = unsafe.Pointer(newFieldsID)
 	registry.delete(oldID)
 }
+
+func (d *DocIMP) FieldNames() []string {
+	self := (*C.lucy_Doc)(unsafe.Pointer(d.TOPTR()))
+	fieldsCF := C.LUCY_Doc_Field_Names(self)
+	defer C.cfish_decref(unsafe.Pointer(fieldsCF))
+	return vecToStringSlice(fieldsCF)
+}

@@ -162,6 +162,7 @@ func specClasses(parcel *cfc.Parcel) {
 	docBinding := cfc.NewGoClass(parcel, "Lucy::Document::Doc")
 	docBinding.SpecMethod("", "GetFields() map[string]interface{}")
 	docBinding.SpecMethod("", "SetFields(map[string]interface{})")
+	docBinding.SpecMethod("Field_Names", "FieldNames() []string")
 	docBinding.Register()
 
 	indexerBinding := cfc.NewGoClass(parcel, "Lucy::Index::Indexer")
