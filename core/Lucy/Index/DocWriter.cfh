@@ -25,7 +25,7 @@ class Lucy::Index::DocWriter inherits Lucy::Index::DataWriter {
 
     inert int32_t current_file_format;
 
-    /** Constructors.
+    /** Create a new DocWriter.
      */
     inert incremented DocWriter*
     new(Schema *schema, Snapshot *snapshot, Segment *segment,

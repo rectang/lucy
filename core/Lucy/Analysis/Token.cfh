@@ -108,6 +108,8 @@ public class Lucy::Analysis::Token inherits Clownfish::Obj {
 
     /** Accessor for pos.  Only valid after position increments for an array
      * of tokens have been resolved.
+     *
+     * @return the calculated position in tokens
      */
     int32_t
     Get_Pos(Token *self);

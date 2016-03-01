@@ -104,6 +104,8 @@ public class Lucy::Index::DataWriter inherits Clownfish::Obj {
     /** Arbitrary metadata to be serialized and stored by the Segment.  The
      * default implementation supplies a Hash with a single key-value pair for
      * "format".
+     *
+     * @return a Hash describing segment metadata
      */
     public incremented Hash*
     Metadata(DataWriter *self);
@@ -111,31 +113,43 @@ public class Lucy::Index::DataWriter inherits Clownfish::Obj {
     /** Every writer must specify a file format revision number, which should
      * increment each time the format changes. Responsibility for revision
      * checking is left to the companion DataReader.
+     *
+     * @return a format revision number
      */
     public abstract int32_t
     Format(DataWriter *self);
 
     /** Accessor for "snapshot" member var.
+     *
+     * @return a Snapshot
      */
     public Snapshot*
     Get_Snapshot(DataWriter *self);
 
     /** Accessor for "segment" member var.
+     *
+     * @return a Segment
      */
     public Segment*
     Get_Segment(DataWriter *self);
 
     /** Accessor for "polyreader" member var.
+     *
+     * @return the PolyReader opened against the index
      */
     public PolyReader*
     Get_PolyReader(DataWriter *self);
 
     /** Accessor for "schema" member var.
+     *
+     * @return a Schema
      */
     public Schema*
     Get_Schema(DataWriter *self);
 
     /** Accessor for "folder" member var.
+     *
+     * @return the index Folder
      */
     public Folder*
     Get_Folder(DataWriter *self);

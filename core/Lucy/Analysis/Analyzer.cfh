@@ -31,11 +31,13 @@ public abstract class Lucy::Analysis::Analyzer inherits Clownfish::Obj {
     public inert Analyzer*
     init(Analyzer *self);
 
-    /** Take a single [](cfish:Inversion) as input
-     * and returns an Inversion, either the same one (presumably transformed
-     * in some way), or a new one.
+    /** Take an [](cfish:Inversion) and transform its content.
+     * 
+     * The output may be either the same Inversion (presumably transformed in
+     * some way), or a new one.
      *
-     * @param inversion An inversion.
+     * @param inversion An Inversion.
+     * @return a transformed Inversion
      */
     public abstract incremented Inversion*
     Transform(Analyzer *self, Inversion *inversion);
@@ -46,13 +48,15 @@ public abstract class Lucy::Analysis::Analyzer inherits Clownfish::Obj {
      * provide an optimized implementation which minimizes string copies.
      *
      * @param text A string.
+     * @return a transformed Inversion
      */
     public incremented Inversion*
     Transform_Text(Analyzer *self, String *text);
 
-    /** Analyze text and return an array of token texts.
+    /** Analyze text and return a of token texts.
      *
      * @param text A string.
+     * @return a Vector of transformed token texts
      */
     public incremented Vector*
     Split(Analyzer *self, String *text);
@@ -60,10 +64,10 @@ public abstract class Lucy::Analysis::Analyzer inherits Clownfish::Obj {
     /** Dump the analyzer as hash.
      *
      * Subclasses should call [](.Dump) on the superclass. The returned
-     * object is a hash which should be populated with parameters of
+     * object is a Hash which should be populated with parameters of
      * the analyzer.
      *
-     * @return A hash containing a description of the analyzer.
+     * @return A Hash containing a description of the analyzer.
      */
     public incremented Obj*
     Dump(Analyzer *self);
@@ -72,12 +76,12 @@ public abstract class Lucy::Analysis::Analyzer inherits Clownfish::Obj {
      *
      * Subclasses should first call [](.Load) on the superclass. The
      * returned object is an analyzer which should be reconstructed by
-     * setting the dumped parameters from the hash contained in `dump`.
+     * setting the dumped parameters from the Hash contained in `dump`.
      *
      * Note that the invocant analyzer is unused.
      *
-     * @param dump A hash.
-     * @return An analyzer.
+     * @param dump a Hash containing a description of an Analyzer
+     * @return a new Analyzer constructed according to the spec in `dump`
      */
     public incremented Obj*
     Load(Analyzer *self, Obj *dump);

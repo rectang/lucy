@@ -75,7 +75,7 @@ public class Lucy::Analysis::SnowballStopFilter nickname SnowStop
 
     /** Create a new SnowballStopFilter.
      *
-     * @param stoplist A hash with stopwords as the keys.
+     * @param stoplist A Hash with stopwords as the keys.
      * @param language The ISO code for a supported language.
      */
     public inert incremented SnowballStopFilter*

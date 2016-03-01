@@ -28,7 +28,9 @@ class Lucy::Index::HighlightReader nickname HLReader
          Snapshot *snapshot = NULL, Vector *segments = NULL,
          int32_t seg_tick = -1);
 
-    /** Return the DocVector object for the given doc id.
+    /** Fetch the DocVector object identified by the given doc ID.
+     *
+     * @return a DocVector
      */
     public abstract incremented DocVector*
     Fetch_Doc_Vec(HighlightReader *self, int32_t doc_id);
@@ -65,8 +67,6 @@ class Lucy::Index::DefaultHighlightReader nickname DefHLReader
     InStream *ix_in;
     InStream *dat_in;
 
-    /** Constructors.
-     */
     inert incremented DefaultHighlightReader*
     new(Schema *schema, Folder *folder, Snapshot *snapshot, Vector *segments,
         int32_t seg_tick);
@@ -75,12 +75,10 @@ class Lucy::Index::DefaultHighlightReader nickname DefHLReader
     init(DefaultHighlightReader *self, Schema *schema, Folder *folder,
          Snapshot *snapshot, Vector *segments, int32_t seg_tick);
 
-    /** Return the DocVector object for the given doc id.
-     */
     public incremented DocVector*
     Fetch_Doc_Vec(DefaultHighlightReader *self, int32_t doc_id);
 
-    /** Return the raw bytes of an entry.
+    /** Read the raw bytes of an entry into `buffer`.
      */
     void
     Read_Record(DefaultHighlightReader *self, int32_t doc_id,

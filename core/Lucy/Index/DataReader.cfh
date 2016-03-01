@@ -53,36 +53,49 @@ public class Lucy::Index::DataReader inherits Clownfish::Obj {
      *
      * @param readers An array of DataReaders.
      * @param offsets Doc id start offsets for each reader.
+     * @return an aggregate DataReader
      */
     public abstract incremented nullable DataReader*
     Aggregator(DataReader *self, Vector *readers, I32Array *offsets);
 
     /** Accessor for "schema" member var.
+     *
+     * @return a Schema
      */
     public nullable Schema*
     Get_Schema(DataReader *self);
 
     /** Accessor for "folder" member var.
+     *
+     * @return the index Folder
      */
     public nullable Folder*
     Get_Folder(DataReader *self);
 
     /** Accessor for "snapshot" member var.
+     *
+     * @return the index Snapshot
      */
     public nullable Snapshot*
     Get_Snapshot(DataReader *self);
 
     /** Accessor for "segments" member var.
+     *
+     * @return an array of Segment objects
      */
     public nullable Vector*
     Get_Segments(DataReader *self);
 
     /** Accessor for "segment" member var.
+     *
+     * @return a Segment
      */
     public nullable Segment*
     Get_Segment(DataReader *self);
 
     /** Accessor for "seg_tick" member var.
+     *
+     * @return a tick indexing into the array of segments
      */
     public int32_t
     Get_Seg_Tick(DataReader *self);

@@ -45,30 +45,37 @@ public class Lucy::Document::Doc inherits Clownfish::Obj {
     public inert Doc*
     init(Doc *self, void *fields = NULL, int32_t doc_id = 0);
 
-    /** Set internal Lucy document id.
+    /** Set internal Lucy document ID.
+     * @param doc_id a document ID
      */
     public void
     Set_Doc_ID(Doc *self, int32_t doc_id);
 
-    /** Retrieve internal Lucy document id.
+    /** Retrieve internal Lucy document ID.
+     * 
+     * @return a document ID.
      */
     public int32_t
     Get_Doc_ID(Doc *self);
 
     /** Store a field value in the Doc.
      *
-     * @param field The field name
-     * @param value The value
+     * @param field field name
+     * @param value field value
      */
     public void
     Store(Doc *self, String *field, Obj *value);
 
     /** Set the doc's field's attribute.
+     *
+     * @param fields field-value pairs
      */
     void
     Set_Fields(Doc *self, void *fields);
 
     /** Return the Doc's backing fields hash.
+     *
+     * @return field-value pairs
      */
     public nullable void*
     Get_Fields(Doc *self);
@@ -78,12 +85,14 @@ public class Lucy::Document::Doc inherits Clownfish::Obj {
     public uint32_t
     Get_Size(Doc *self);
 
-    /** Retrieve the field's value, or NULL if the field is not present.
+    /** Retrieve the field's value, or [](@null) if the field is not present.
      */
     public nullable incremented Obj*
     Extract(Doc *self, String *field);
 
-    /** Return a list of names of all fields present.
+    /** Obtain a list of names of all fields present.
+     * 
+     * @return a list of field names
      */
     public incremented Vector*
     Field_Names(Doc *self);

@@ -41,6 +41,7 @@ public class Lucy::Index::DocReader inherits Lucy::Index::DataReader {
      *
      * @param readers An array of DocReaders.
      * @param offsets Doc id start offsets for each reader.
+     * @return an aggregate DocReader
      */
     public incremented nullable DocReader*
     Aggregator(DocReader *self, Vector *readers, I32Array *offsets);

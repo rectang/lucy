@@ -47,7 +47,10 @@ public class Lucy::Analysis::Inversion inherits Clownfish::Obj {
     public void
     Append(Inversion *self, decremented Token *token);
 
-    /** Return the next token in the Inversion until out of tokens.
+    /** Iterate through tokens.
+     * 
+     * @return the next token in the Inversion until out of tokens, then
+     * [](@null)
      */
     public nullable Token*
     Next(Inversion *self);
@@ -68,7 +71,8 @@ public class Lucy::Analysis::Inversion inherits Clownfish::Obj {
     /** Return a pointer to the next group of like Tokens.  The number of
      * tokens in the cluster will be placed into `count`.
      *
-     * @param count The number of tokens in the cluster.
+     * @param count A pointer to the number of tokens in the cluster.
+     * @return a pointer to the next group of like Tokens.
      */
     nullable Token**
     Next_Cluster(Inversion *self, uint32_t *count);
