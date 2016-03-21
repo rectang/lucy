@@ -149,7 +149,8 @@ S_parse_single(const char *text, size_t len, lucy_StringIter *iter,
 
     Token *token = Token_new(text + start.byte_pos,
                              iter->byte_pos - start.byte_pos,
-                             start.char_pos, iter->char_pos, 1.0f, 1);
+                             (uint32_t)start.char_pos,
+                             (uint32_t)iter->char_pos, 1.0f, 1);
     Inversion_Append(inversion, token);
 
     return wb;
@@ -251,7 +252,8 @@ S_parse_word(const char *text, size_t len, lucy_StringIter *iter,
     Token *token;
 word_break:
     token = Token_new(text + start.byte_pos, end.byte_pos - start.byte_pos,
-                      start.char_pos, end.char_pos, 1.0f, 1);
+                      (uint32_t)start.char_pos, (uint32_t)end.char_pos,
+                      1.0f, 1);
     Inversion_Append(inversion, token);
 
     return wb;
@@ -303,7 +305,7 @@ S_wb_lookup(const char *ptr) {
         else {
             // four byte sequence
             // 11110ppp 10pppppp 10rrrrrr 10cccccc
-            plane_index = ((start & 0x07) << 6) | (*ptr++ & 0x3F);
+            plane_index = ((size_t)((start & 0x07) << 6)) | (*ptr++ & 0x3F);
         }
         if (plane_index >= WB_PLANE_MAP_SIZE) { return 0; }
         plane_id  = wb_plane_map[plane_index];

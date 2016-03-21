@@ -40,8 +40,8 @@ BitVecDelDocs_init(BitVecDelDocs *self, Folder *folder,
         RETHROW(error);
     }
     // Cast away const-ness of buffer as we have no immutable BitVector.
-    int32_t len    = (int32_t)InStream_Length(ivars->instream);
-    ivars->bits    = (uint8_t*)InStream_Buf(ivars->instream, len);
+    int64_t len    = InStream_Length(ivars->instream);
+    ivars->bits    = (uint8_t*)InStream_Buf(ivars->instream, (size_t)len);
     ivars->cap     = (uint32_t)(len * 8);
     return self;
 }

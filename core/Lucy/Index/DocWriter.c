@@ -119,25 +119,25 @@ DocWriter_Add_Inverted_Doc_IMP(DocWriter *self, Inverter *inverter,
                 case FType_TEXT: {
                     const char *buf  = Str_Get_Ptr8((String*)value);
                     size_t      size = Str_Get_Size((String*)value);
-                    OutStream_Write_C32(dat_out, size);
+                    OutStream_Write_C32(dat_out, (uint32_t)size);
                     OutStream_Write_Bytes(dat_out, buf, size);
                     break;
                 }
                 case FType_BLOB: {
                     const char *buf  = Blob_Get_Buf((Blob*)value);
                     size_t      size = Blob_Get_Size((Blob*)value);
-                    OutStream_Write_C32(dat_out, size);
+                    OutStream_Write_C32(dat_out, (uint32_t)size);
                     OutStream_Write_Bytes(dat_out, buf, size);
                     break;
                 }
                 case FType_INT32: {
                     int32_t val = (int32_t)Int_Get_Value((Integer*)value);
-                    OutStream_Write_C32(dat_out, val);
+                    OutStream_Write_C32(dat_out, (uint32_t)val);
                     break;
                 }
                 case FType_INT64: {
                     int64_t val = Int_Get_Value((Integer*)value);
-                    OutStream_Write_C64(dat_out, val);
+                    OutStream_Write_C64(dat_out, (uint64_t)val);
                     break;
                 }
                 case FType_FLOAT32: {
@@ -180,7 +180,7 @@ DocWriter_Add_Segment_IMP(DocWriter *self, SegReader *reader,
                   DEFAULTDOCREADER);
 
         for (int32_t i = 1, max = SegReader_Doc_Max(reader); i <= max; i++) {
-            if (I32Arr_Get(doc_map, i)) {
+            if (I32Arr_Get(doc_map, (uint32_t)i)) {
                 int64_t  start = OutStream_Tell(dat_out);
 
                 // Copy record over.

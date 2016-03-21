@@ -55,7 +55,7 @@ Doc_Set_Fields_IMP(Doc *self, void *fields) {
 uint32_t
 Doc_Get_Size_IMP(Doc *self) {
     Hash *hash = (Hash*)Doc_IVARS(self)->fields;
-    return Hash_Get_Size(hash);
+    return (uint32_t)Hash_Get_Size(hash);
 }
 
 void
@@ -69,14 +69,14 @@ Doc_Serialize_IMP(Doc *self, OutStream *outstream) {
     DocIVARS *const ivars = Doc_IVARS(self);
     Hash *hash = (Hash*)ivars->fields;
     Freezer_serialize_hash(hash, outstream);
-    OutStream_Write_C32(outstream, ivars->doc_id);
+    OutStream_Write_C32(outstream, (uint32_t)ivars->doc_id);
 }
 
 Doc*
 Doc_Deserialize_IMP(Doc *self, InStream *instream) {
     DocIVARS *const ivars = Doc_IVARS(self);
     ivars->fields = Freezer_read_hash(instream);
-    ivars->doc_id = InStream_Read_C32(instream);
+    ivars->doc_id = (int32_t)InStream_Read_C32(instream);
     return self;
 }
 

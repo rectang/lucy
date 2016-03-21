@@ -169,7 +169,7 @@ DefLexReader_init(DefaultLexiconReader *self, Schema *schema, Folder *folder,
     // Build an array of SegLexicon objects.
     ivars->lexicons = Vec_new(Schema_Num_Fields(schema));
     for (uint32_t i = 1, max = Schema_Num_Fields(schema) + 1; i < max; i++) {
-        String *field = Seg_Field_Name(segment, i);
+        String *field = Seg_Field_Name(segment, (int32_t)i);
         if (field && S_has_data(schema, folder, segment, field)) {
             SegLexicon *lexicon = SegLex_new(schema, folder, segment, field);
             Vec_Store(ivars->lexicons, i, (Obj*)lexicon);
@@ -198,7 +198,7 @@ DefLexReader_Lexicon_IMP(DefaultLexiconReader *self, String *field,
                          Obj *term) {
     DefaultLexiconReaderIVARS *const ivars = DefLexReader_IVARS(self);
     int32_t     field_num = Seg_Field_Num(ivars->segment, field);
-    SegLexicon *orig      = (SegLexicon*)Vec_Fetch(ivars->lexicons, field_num);
+    SegLexicon *orig      = (SegLexicon*)Vec_Fetch(ivars->lexicons, (size_t)field_num);
     SegLexicon *lexicon   = NULL;
 
     if (orig) { // i.e. has data
@@ -216,7 +216,7 @@ S_find_tinfo(DefaultLexiconReader *self, String *field, Obj *target) {
     if (field != NULL && target != NULL) {
         int32_t field_num = Seg_Field_Num(ivars->segment, field);
         SegLexicon *lexicon
-            = (SegLexicon*)Vec_Fetch(ivars->lexicons, field_num);
+            = (SegLexicon*)Vec_Fetch(ivars->lexicons, (size_t)field_num);
 
         if (lexicon) {
             // Iterate until the result is ge the term.
@@ -243,7 +243,7 @@ uint32_t
 DefLexReader_Doc_Freq_IMP(DefaultLexiconReader *self, String *field,
                           Obj *term) {
     TermInfo *tinfo = S_find_tinfo(self, field, term);
-    return tinfo ? TInfo_Get_Doc_Freq(tinfo) : 0;
+    return tinfo ? (uint32_t)TInfo_Get_Doc_Freq(tinfo) : 0;
 }
 
 

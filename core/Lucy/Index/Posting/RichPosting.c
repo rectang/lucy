@@ -134,11 +134,11 @@ RichPost_Add_Inversion_To_Pool_IMP(RichPosting *self, PostingPool *post_pool,
         // Positions and boosts.
         for (uint32_t i = 0; i < freq; i++) {
             TokenIVARS *const t_ivars = Token_IVARS(tokens[i]);
-            const uint32_t prox_delta = t_ivars->pos - last_prox;
+            const uint32_t prox_delta = (uint32_t)t_ivars->pos - last_prox;
             const float boost = field_boost * t_ivars->boost;
 
             NumUtil_encode_c32(prox_delta, &dest);
-            last_prox = t_ivars->pos;
+            last_prox = (uint32_t)t_ivars->pos;
 
             *((uint8_t*)dest) = Sim_Encode_Norm(sim, boost);
             dest++;

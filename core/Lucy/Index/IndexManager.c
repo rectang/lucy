@@ -163,7 +163,7 @@ IxManager_Recycle_IMP(IndexManager *self, PolyReader *reader,
     for (uint32_t i = 0; i < num_candidates; i++) {
         counts[i] = SegReader_Doc_Count(candidates[i]);
     }
-    I32Array *doc_counts = I32Arr_new_steal(counts, num_candidates);
+    I32Array *doc_counts = I32Arr_new_steal(counts, (uint32_t)num_candidates);
     uint32_t threshold = IxManager_Choose_Sparse(self, doc_counts);
     DECREF(doc_counts);
 
@@ -198,7 +198,7 @@ IxManager_Choose_Sparse_IMP(IndexManager *self, I32Array *doc_counts) {
     // Find sparsely populated segments.
     for (uint32_t i = 0; i < num_candidates; i++) {
         uint32_t num_segs_when_done = num_candidates - threshold + 1;
-        total_docs += I32Arr_Get(doc_counts, i);
+        total_docs += (uint32_t)I32Arr_Get(doc_counts, (uint32_t)i);
         if (total_docs < S_fibonacci(num_segs_when_done + 5)) {
             threshold = i + 1;
         }
@@ -237,8 +237,8 @@ IxManager_Make_Write_Lock_IMP(IndexManager *self) {
     String *write_lock_name = SSTR_WRAP_C("write");
     LockFactory *lock_factory = S_obtain_lock_factory(self);
     return LockFact_Make_Lock(lock_factory, write_lock_name,
-                              ivars->write_lock_timeout,
-                              ivars->write_lock_interval);
+                              (int32_t)ivars->write_lock_timeout,
+                              (int32_t)ivars->write_lock_interval);
 }
 
 Lock*
@@ -247,8 +247,8 @@ IxManager_Make_Deletion_Lock_IMP(IndexManager *self) {
     String *lock_name = SSTR_WRAP_C("deletion");
     LockFactory *lock_factory = S_obtain_lock_factory(self);
     return LockFact_Make_Lock(lock_factory, lock_name,
-                              ivars->deletion_lock_timeout,
-                              ivars->deletion_lock_interval);
+                              (int32_t)ivars->deletion_lock_timeout,
+                              (int32_t)ivars->deletion_lock_interval);
 }
 
 Lock*
@@ -257,8 +257,8 @@ IxManager_Make_Merge_Lock_IMP(IndexManager *self) {
     String *merge_lock_name = SSTR_WRAP_C("merge");
     LockFactory *lock_factory = S_obtain_lock_factory(self);
     return LockFact_Make_Lock(lock_factory, merge_lock_name,
-                              ivars->merge_lock_timeout,
-                              ivars->merge_lock_interval);
+                              (int32_t)ivars->merge_lock_timeout,
+                              (int32_t)ivars->merge_lock_interval);
 }
 
 void

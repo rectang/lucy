@@ -156,17 +156,17 @@ HLWriter_TV_Buf_IMP(HighlightWriter *self, Inversion *inversion) {
     while ((tokens = Inversion_Next_Cluster(inversion, &freq)) != NULL) {
         Token *token = *tokens;
         char *const   token_text = Token_Get_Text(token);
-        const int32_t token_len  = Token_Get_Len(token);
+        const size_t  token_len  = Token_Get_Len(token);
 
-        int32_t overlap = StrHelp_overlap(last_text, token_text,
-                                          last_len, token_len);
+        size_t overlap = StrHelp_overlap(last_text, token_text,
+                                         last_len, token_len);
         char *ptr;
         char *orig;
         size_t old_size = BB_Get_Size(tv_buf);
         size_t new_size = old_size
                           + C32_MAX_BYTES      // overlap
                           + C32_MAX_BYTES      // length of string diff
-                          + (token_len - overlap)        // diff char data
+                          + (token_len - overlap) // diff char data
                           + C32_MAX_BYTES                // num prox
                           + (C32_MAX_BYTES * freq * 3);  // pos data
 
@@ -179,8 +179,8 @@ HLWriter_TV_Buf_IMP(HighlightWriter *self, Inversion *inversion) {
         num_postings += 1;
 
         // Append the string diff to the tv_buf.
-        NumUtil_encode_c32(overlap, &ptr);
-        NumUtil_encode_c32((token_len - overlap), &ptr);
+        NumUtil_encode_c32((uint32_t)overlap, &ptr);
+        NumUtil_encode_c32((uint32_t)(token_len - overlap), &ptr);
         memcpy(ptr, (token_text + overlap), (token_len - overlap));
         ptr += token_len - overlap;
 
@@ -193,13 +193,13 @@ HLWriter_TV_Buf_IMP(HighlightWriter *self, Inversion *inversion) {
 
         do {
             // Add position, start_offset, and end_offset to tv_buf.
-            NumUtil_encode_c32(Token_Get_Pos(token), &ptr);
+            NumUtil_encode_c32((uint32_t)Token_Get_Pos(token), &ptr);
             NumUtil_encode_c32(Token_Get_Start_Offset(token), &ptr);
             NumUtil_encode_c32(Token_Get_End_Offset(token), &ptr);
         } while (--freq && (token = *++tokens));
 
         // Set new byte length.
-        BB_Set_Size(tv_buf, ptr - orig);
+        BB_Set_Size(tv_buf, (size_t)(ptr - orig));
     }
 
     // Go back and start the term vector string with the posting count.
@@ -233,7 +233,7 @@ HLWriter_Add_Segment_IMP(HighlightWriter *self, SegReader *reader,
 
         for (orig = 1; orig <= doc_max; orig++) {
             // Skip deleted docs.
-            if (doc_map && !I32Arr_Get(doc_map, orig)) {
+            if (doc_map && !I32Arr_Get(doc_map, (uint32_t)orig)) {
                 continue;
             }
 

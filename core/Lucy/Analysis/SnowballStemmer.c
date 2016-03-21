@@ -39,8 +39,8 @@ SnowStemmer_init(SnowballStemmer *self, String *language) {
     ivars->language = Str_Clone(language);
 
     // Get a Snowball stemmer.  Be case-insensitive.
-    lang_buf[0] = tolower(Str_Code_Point_At(language, 0));
-    lang_buf[1] = tolower(Str_Code_Point_At(language, 1));
+    lang_buf[0] = (char)tolower(Str_Code_Point_At(language, 0));
+    lang_buf[1] = (char)tolower(Str_Code_Point_At(language, 1));
     lang_buf[2] = '\0';
     ivars->snowstemmer = sb_stemmer_new(lang_buf, "UTF_8");
     if (!ivars->snowstemmer) {
@@ -71,14 +71,17 @@ SnowStemmer_Transform_IMP(SnowballStemmer *self, Inversion *inversion) {
         TokenIVARS *const token_ivars = Token_IVARS(token);
         const sb_symbol *stemmed_text 
             = sb_stemmer_stem(snowstemmer, (sb_symbol*)token_ivars->text,
-                              token_ivars->len);
-        size_t len = sb_stemmer_length(snowstemmer);
-        if (len > token_ivars->len) {
-            FREEMEM(token_ivars->text);
-            token_ivars->text = (char*)MALLOCATE(len + 1);
+                              (int)token_ivars->len);
+        int len = sb_stemmer_length(snowstemmer);
+        if (len < 0) {
+            len = 0; // paranoia
         }
-        memcpy(token_ivars->text, stemmed_text, len + 1);
-        token_ivars->len = len;
+        else if ((size_t)len > token_ivars->len) {
+            FREEMEM(token_ivars->text);
+            token_ivars->text = (char*)MALLOCATE((size_t)len + 1);
+        }
+        memcpy(token_ivars->text, stemmed_text, (size_t)len + 1);
+        token_ivars->len = (size_t)len;
     }
     Inversion_Reset(inversion);
     return (Inversion*)INCREF(inversion);

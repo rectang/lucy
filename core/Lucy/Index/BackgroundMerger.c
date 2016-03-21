@@ -345,7 +345,7 @@ S_merge_updated_deletions(BackgroundMerger *self) {
                 // Find the slot where the deleted doc resides in the
                 // rewritten segment. If the doc was already deleted when we
                 // were merging, do nothing.
-                int32_t remapped = I32Arr_Get(doc_map, del);
+                int32_t remapped = I32Arr_Get(doc_map, (uint32_t)del);
                 if (remapped) {
                     // It's a new deletion, so carry it forward and zap it in
                     // the rewritten segment.

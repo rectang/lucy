@@ -277,7 +277,7 @@ S_try_open_elements(void *context) {
 
         // Create a Segment for each segmeta.
         if (Seg_valid_seg_name(entry)) {
-            int64_t seg_num = IxFileNames_extract_gen(entry);
+            int64_t seg_num = (int64_t)IxFileNames_extract_gen(entry);
             Segment *segment = Seg_new(seg_num);
 
             // Bail if reading the file fails (probably because it's been
@@ -308,7 +308,7 @@ S_try_open_elements(void *context) {
     seg_context.result   = NULL;
     args->seg_readers = Vec_new(num_segs);
     Err *error = NULL;
-    for (uint32_t seg_tick = 0; seg_tick < num_segs; seg_tick++) {
+    for (int32_t seg_tick = 0; seg_tick < (int32_t)num_segs; seg_tick++) {
         seg_context.seg_tick = seg_tick;
         error = Err_trap(S_try_open_segreader, &seg_context);
         if (error) {
@@ -550,7 +550,7 @@ PolyReader_Get_Seg_Readers_IMP(PolyReader *self) {
 
 uint32_t
 PolyReader_sub_tick(I32Array *offsets, int32_t doc_id) {
-    int32_t size = I32Arr_Get_Size(offsets);
+    int32_t size = (int32_t)I32Arr_Get_Size(offsets);
     if (size == 0) {
         return 0;
     }
@@ -559,7 +559,7 @@ PolyReader_sub_tick(I32Array *offsets, int32_t doc_id) {
     int32_t hi = size;
     while (hi - lo > 1) {
         int32_t mid = lo + ((hi - lo) / 2);
-        int32_t offset = I32Arr_Get(offsets, mid);
+        int32_t offset = I32Arr_Get(offsets, (uint32_t)mid);
         if (doc_id <= offset) {
             hi = mid;
         }
@@ -572,7 +572,7 @@ PolyReader_sub_tick(I32Array *offsets, int32_t doc_id) {
     }
 
     while (hi > 0) {
-        int32_t offset = I32Arr_Get(offsets, hi);
+        int32_t offset = I32Arr_Get(offsets, (uint32_t)hi);
         if (doc_id <= offset) {
             hi--;
         }
@@ -581,7 +581,7 @@ PolyReader_sub_tick(I32Array *offsets, int32_t doc_id) {
         }
     }
 
-    return hi;
+    return (uint32_t)hi;
 }
 
 
