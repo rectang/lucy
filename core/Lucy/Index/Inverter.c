@@ -86,7 +86,8 @@ Inverter_Iterate_IMP(Inverter *self) {
 int32_t
 Inverter_Next_IMP(Inverter *self) {
     InverterIVARS *const ivars = Inverter_IVARS(self);
-    ivars->current = (InverterEntry*)Vec_Fetch(ivars->entries, ++ivars->tick);
+    ivars->tick++;
+    ivars->current = (InverterEntry*)Vec_Fetch(ivars->entries, (size_t)ivars->tick);
     if (!ivars->current) { ivars->current = ivars->blank; } // Exhausted.
     return InvEntry_IVARS(ivars->current)->field_num;
 }
@@ -167,7 +168,7 @@ Inverter_Add_Field_IMP(Inverter *self, InverterEntry *entry) {
         String *value = (String*)entry_ivars->value;
         size_t token_len = Str_Get_Size(value);
         Token *seed = Token_new(Str_Get_Ptr8(value),
-                                token_len, 0, token_len, 1.0f, 1);
+                                token_len, 0, (uint32_t)token_len, 1.0f, 1);
         DECREF(entry_ivars->inversion);
         entry_ivars->inversion = Inversion_new(seed);
         DECREF(seed);

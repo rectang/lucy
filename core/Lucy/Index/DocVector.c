@@ -122,11 +122,11 @@ static Hash*
 S_extract_tv_cache(Blob *field_buf) {
     Hash       *tv_cache  = Hash_new(0);
     const char *tv_string = Blob_Get_Buf(field_buf);
-    int32_t     num_terms = NumUtil_decode_c32(&tv_string);
+    uint32_t    num_terms = NumUtil_decode_c32(&tv_string);
     ByteBuf    *text_buf  = BB_new(0);
 
     // Read the number of highlightable terms in the field.
-    for (int32_t i = 0; i < num_terms; i++) {
+    for (uint32_t i = 0; i < num_terms; i++) {
         size_t   overlap = NumUtil_decode_c32(&tv_string);
         size_t   len     = NumUtil_decode_c32(&tv_string);
 
@@ -137,14 +137,14 @@ S_extract_tv_cache(Blob *field_buf) {
 
         // Get positions & offsets string.
         const char *bookmark_ptr  = tv_string;
-        int32_t     num_positions = NumUtil_decode_c32(&tv_string);
+        int32_t     num_positions = (int32_t)NumUtil_decode_c32(&tv_string);
         while (num_positions--) {
             // Leave nums compressed to save a little mem.
             NumUtil_skip_cint(&tv_string);
             NumUtil_skip_cint(&tv_string);
             NumUtil_skip_cint(&tv_string);
         }
-        len = tv_string - bookmark_ptr;
+        len = (size_t)(tv_string - bookmark_ptr);
 
         // Store the $text => $posdata pair in the output hash.
         String *text = BB_Trusted_Utf8_To_String(text_buf);
@@ -175,9 +175,9 @@ S_extract_tv_from_tv_buf(String *field, String *term_text, Blob *tv_buf) {
 
     // Expand C32s.
     for (uint32_t i = 0; i < num_pos; i++) {
-        positions[i] = NumUtil_decode_c32(&posdata);
-        starts[i]    = NumUtil_decode_c32(&posdata);
-        ends[i]      = NumUtil_decode_c32(&posdata);
+        positions[i] = (int32_t)NumUtil_decode_c32(&posdata);
+        starts[i]    = (int32_t)NumUtil_decode_c32(&posdata);
+        ends[i]      = (int32_t)NumUtil_decode_c32(&posdata);
     }
 
     if (posdata != posdata_end) {

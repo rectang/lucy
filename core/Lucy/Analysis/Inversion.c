@@ -92,7 +92,7 @@ S_grow(Inversion *self, size_t size) {
         // Clip rather than wrap.
         if (amount > SIZE_MAX || amount < size) { amount = SIZE_MAX; }
         ivars->tokens = (Token**)REALLOCATE(ivars->tokens, (size_t)amount);
-        ivars->cap    = size;
+        ivars->cap    = (uint32_t)size;
         memset(ivars->tokens + ivars->size, 0,
                (size - ivars->size) * sizeof(Token*));
     }

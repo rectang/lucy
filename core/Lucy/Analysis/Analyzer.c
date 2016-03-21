@@ -32,7 +32,7 @@ Inversion*
 Analyzer_Transform_Text_IMP(Analyzer *self, String *text) {
     size_t token_len = Str_Get_Size(text);
     Token *seed = Token_new(Str_Get_Ptr8(text), token_len, 0,
-                            token_len, 1.0, 1);
+                            (uint32_t)token_len, 1.0, 1);
     Inversion *starter = Inversion_new(seed);
     Inversion *retval  = Analyzer_Transform(self, starter);
     DECREF(seed);

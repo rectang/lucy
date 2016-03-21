@@ -81,7 +81,7 @@ Normalizer_Transform_IMP(Normalizer *self, Inversion *inversion) {
         TokenIVARS *const token_ivars = Token_IVARS(token);
         ssize_t len
             = utf8proc_decompose((uint8_t*)token_ivars->text,
-                                 token_ivars->len, buffer, bufsize,
+                                 (ssize_t)token_ivars->len, buffer, bufsize,
                                  ivars->options);
 
         if (len > bufsize) {
@@ -91,10 +91,11 @@ Normalizer_Transform_IMP(Normalizer *self, Inversion *inversion) {
             }
             // allocate additional INITIAL_BUFSIZE items
             bufsize = len + INITIAL_BUFSIZE;
-            buffer = (int32_t*)MALLOCATE((bufsize + 1) * sizeof(int32_t));
+            size_t amount = ((size_t)(bufsize + 1) * sizeof(int32_t));
+            buffer = (int32_t*)MALLOCATE(amount);
             len = utf8proc_decompose((uint8_t*)token_ivars->text,
-                                     token_ivars->len, buffer, bufsize,
-                                     ivars->options);
+                                     (ssize_t)token_ivars->len, buffer,
+                                     bufsize, ivars->options);
         }
         if (len < 0) {
             continue;
@@ -105,10 +106,10 @@ Normalizer_Transform_IMP(Normalizer *self, Inversion *inversion) {
         if (len >= 0) {
             if (len > (ssize_t)token_ivars->len) {
                 FREEMEM(token_ivars->text);
-                token_ivars->text = (char*)MALLOCATE(len + 1);
+                token_ivars->text = (char*)MALLOCATE((size_t)len + 1);
             }
             memcpy(token_ivars->text, buffer, len + 1);
-            token_ivars->len = len;
+            token_ivars->len = (size_t)len;
         }
     }
 
