@@ -61,7 +61,7 @@ ORQuery_Equals_IMP(ORQuery *self, Obj *other) {
 String*
 ORQuery_To_String_IMP(ORQuery *self) {
     ORQueryIVARS *const ivars = ORQuery_IVARS(self);
-    uint32_t num_kids = Vec_Get_Size(ivars->children);
+    uint32_t num_kids = (uint32_t)Vec_Get_Size(ivars->children);
     if (!num_kids) { return Str_new_from_trusted_utf8("()", 2); }
     else {
         CharBuf *buf = CB_new(0);
@@ -104,7 +104,7 @@ Matcher*
 ORCompiler_Make_Matcher_IMP(ORCompiler *self, SegReader *reader,
                             bool need_score) {
     ORCompilerIVARS *const ivars = ORCompiler_IVARS(self);
-    uint32_t num_kids = Vec_Get_Size(ivars->children);
+    uint32_t num_kids = (uint32_t)Vec_Get_Size(ivars->children);
 
     if (num_kids == 1) {
         // No need for an ORMatcher wrapper.
